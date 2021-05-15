@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "618393973221",
+    "project_id": "ecopup-8acb0",
+    "storage_bucket": "ecopup-8acb0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:618393973221:android:3ac5369caee927b29dff0c",
+        "android_client_info": {
+          "package_name": "com.reactnativefirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "618393973221-2ra9kjd4k0nvu08j897vb2f41slb179v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8eiT0n1TOZVnEpGgPXsINzocjgiD_Vhg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "618393973221-2ra9kjd4k0nvu08j897vb2f41slb179v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
