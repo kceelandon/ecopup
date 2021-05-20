@@ -1,35 +1,15 @@
 import { StatusBar, setStatusBarNetworkActivityIndicatorVisible } from 'expo-status-bar';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dimensions, StyleSheet, Text, View, useWindowDimensions,TouchableOpacity } from 'react-native';
 import MapView from 'react-native-maps';
-import * as firebase from 'firebase';
-import '@firebase/auth';
-import '@firebase/firestore';
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDzb3EeaoP6U0L-m5j2XVdM0v1s6yjEUDo",
-  authDomain: "ecopup-8acb0.firebaseapp.com",
-  databaseURL: "https://ecopup-8acb0-default-rtdb.firebaseio.com",
-  projectId: "ecopup-8acb0",
-  storageBucket: "ecopup-8acb0.appspot.com",
-  messagingSenderId: "618393973221",
-  appId: "1:618393973221:web:2ad2c6b08a28af8e9dff0c"
-};
-
-if (firebase.apps.length === 0) {
-  firebase.initializeApp(firebaseConfig)
-}
-
-const locationsDB = firebase.database().ref('locations/one/score');
-locationsDB.on('value', (snap) => console.log(snap.val() + ''));
-
+import { firebase } from './src/firebase/config'
 import Marker from 'react-native-maps';
 import { TabView, SceneMap } from 'react-native-tab-view';
 
 // Different sustainability tabs
 const FirstRoute = () => (
   <View style={styles.scene} >
-    <Text >Sustaibability Score 50</Text>
+    <Text >Sustaibability Score: 50</Text>
     <Text>Product 10</Text>
     <Text>Wast 10</Text>
     <Text>Community 10</Text>
@@ -53,18 +33,34 @@ const renderScene = SceneMap({
 });
 
 export default function App() {
-  const [index, setIndex] = React.useState(0);
-  const [height, setHeight] = React.useState(Dimensions.get('window').height);
-  const [visible, setVisible]= React.useState(true);
+  const [index, setIndex] = useState(0);
+  const [height, setHeight] = useState(Dimensions.get('window').height);
+  const [visible, setVisible]= useState(true);
   const layout = useWindowDimensions();
   const half = layout.height/2;
-  const [routes] = React.useState([
+  const [routes] = useState([
     { key: 'first', title: 'Sustainability' },
     { key: 'second', title: 'Compare' },
     { key: 'third', title:'Review' },
   ]);
+  const [locationData, setLocationData] = useState([]);
+  const ref = firebase.database().ref('locations');
 
-  // list for places to highlight
+  useEffect(() => {
+    ref.once('value').then((snapshot) => {
+      const newDataList = [];
+      snapshot.forEach((childSnap) => {
+        console.log(childSnap.key);
+        let updatedData = childSnap.val();
+        newDataList.push(updatedData);
+      });
+      setLocationData(newDataList);
+    });
+  }, [])
+
+  // list for places to highlight. this should now be updated to query from firebase
+  // new data is named: locationData
+  /*
   var markers = [
     {
       latitude: 47.663,
@@ -80,7 +76,7 @@ export default function App() {
       description: 'Bring bag'
     }
   ];
-
+  */
 
   const initialLayout = { width: Dimensions.get('window').width };
 
@@ -94,12 +90,12 @@ export default function App() {
           longitudeDelta: 0.05,   
         }}>
 
-        {markers.map((marker, index) => (
+        {locationData.map((marker, index) => (
           <MapView.Marker
             key={index+10}
             coordinate={{latitude: marker.latitude, longitude: marker.longitude}}
-            title={marker.title}
-            description={marker.description}
+            title={marker.name}
+            description={marker.description + ' Score: ' + marker.score}
           >
           {console.log(marker)}
           </MapView.Marker>
