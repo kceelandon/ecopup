@@ -5,14 +5,20 @@ import MapView from 'react-native-maps';
 import { firebase } from './src/firebase/config'
 import Marker from 'react-native-maps';
 import { TabView, SceneMap } from 'react-native-tab-view';
+import Accord from "./Accord";
 
 // Different sustainability tabs
 const FirstRoute = () => (
   <View style={styles.scene} >
-    <Text >Sustaibability Score: 50</Text>
-    <Text>Product 10</Text>
-    <Text>Wast 10</Text>
-    <Text>Community 10</Text>
+    <View style={{flexDirection:"row",marginTop: 20, marginLeft: 20, }}>
+    <Text style={styles.titleText}> Sustianability score</Text>
+    <TouchableOpacity
+        style={styles.circle}>
+          <Text>50</Text>
+      </TouchableOpacity>
+      </View>
+    <Accord/>
+
   </View>
 );
 
@@ -35,7 +41,7 @@ const renderScene = SceneMap({
 export default function App() {
   const [index, setIndex] = useState(0);
   const [height, setHeight] = useState(Dimensions.get('window').height);
-  const [visible, setVisible]= useState(true);
+  const [visible, setVisible]= useState(false);
   const layout = useWindowDimensions();
   const half = layout.height/2;
   const [routes] = useState([
@@ -102,7 +108,7 @@ export default function App() {
         ))}
       </MapView>
       <TouchableOpacity
-        onPress={()=>setVisible.bind(false)}
+        onPress={()=>setVisible(!visible)}
         title="Learn More"
         style={styles.roundButton1}>
           <Text>Eco</Text>
@@ -141,8 +147,7 @@ const styles = StyleSheet.create({
   scene:{
     flex: 1,
     backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: 'stretch',
 
   },
 
@@ -161,4 +166,17 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
   },
+  circle: {
+    marginLeft: 20,
+    height: 30,
+    width: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
+    backgroundColor:"#FFFF00"
+  },
+  titleText: {
+    fontSize: 20,
+    fontWeight: "bold"
+  }
 });
