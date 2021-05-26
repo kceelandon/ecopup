@@ -30,12 +30,18 @@ const ThirdRoute = () => (
   <View style={styles.scene} />
 );
 
+const FourthRoute = () => (
+  <View style={styles.scene} />
+  // put score explaination here info here 
+);
+
 const initialLayout = { width: Dimensions.get('window').width };
 
 const renderScene = SceneMap({
   first: FirstRoute,
   second: SecondRoute,
   third: ThirdRoute,
+  fourth: FourthRoute,
 });
 
 export default function App() {
@@ -48,6 +54,7 @@ export default function App() {
     { key: 'first', title: 'Sustainability' },
     { key: 'second', title: 'Compare' },
     { key: 'third', title:'Review' },
+    { key: 'fourth', title:'Score explaination' },
   ]);
   const [locationData, setLocationData] = useState([]);
   const ref = firebase.database().ref('locations');
