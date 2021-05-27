@@ -4,7 +4,7 @@ import { Dimensions, StyleSheet, Text, View, useWindowDimensions,TouchableOpacit
 import MapView from 'react-native-maps';
 import { firebase } from './src/firebase/config'
 import Marker from 'react-native-maps';
-import { TabView, SceneMap } from 'react-native-tab-view';
+import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import Accord from "./Accord";
 
 // Different sustainability tabs
@@ -35,6 +35,14 @@ const FourthRoute = () => (
   // put score explaination here info here 
 );
 
+const renderTabBar = props => (
+  <TabBar
+    {...props}
+    indicatorStyle={{ backgroundColor: 'white' }}
+    style={{ backgroundColor: 'green' }}
+
+  />
+);
 const initialLayout = { width: Dimensions.get('window').width };
 
 const renderScene = SceneMap({
@@ -46,15 +54,14 @@ const renderScene = SceneMap({
 
 export default function App() {
   const [index, setIndex] = useState(0);
-  const [height, setHeight] = useState(Dimensions.get('window').height);
   const [visible, setVisible]= useState(false);
   const layout = useWindowDimensions();
   const half = layout.height/2;
   const [routes] = useState([
-    { key: 'first', title: 'Sustainability' },
+    { key: 'first', title: 'Eco' },
     { key: 'second', title: 'Compare' },
     { key: 'third', title:'Review' },
-    { key: 'fourth', title:'Score explaination' },
+    { key: 'fourth', title:'Explain' },
   ]);
   const [locationData, setLocationData] = useState([]);
   const ref = firebase.database().ref('locations');
@@ -107,22 +114,21 @@ export default function App() {
           <MapView.Marker
             key={index+10}
             coordinate={{latitude: marker.latitude, longitude: marker.longitude}}
-            title={marker.name}
-            description={marker.description + ' Score: ' + marker.score}
           >
           {console.log(marker)}
+          <MapView.Callout onPress={() =>setVisible(!visible) }>
+               <Text style={styles.titleText}>{marker.name} &#x1F43E;</Text>
+               <Text> {"Remember! "+marker.description}</Text>
+
+               
+          </MapView.Callout>
           </MapView.Marker>
         ))}
       </MapView>
-      <TouchableOpacity
-        onPress={()=>setVisible(!visible)}
-        title="Learn More"
-        style={styles.roundButton1}>
-          <Text>Eco</Text>
-      </TouchableOpacity>
       { visible && <TabView
         navigationState={{ index, routes }}
         renderScene={renderScene}
+        renderTabBar={renderTabBar}
         onIndexChange={setIndex}
         style={styles.container}
         initialLayout={initialLayout}
@@ -147,9 +153,9 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     backgroundColor: "#00FF00",
   },
+
   container: {
     marginTop: Dimensions.get('window').height/2,
-
   },
   scene:{
     flex: 1,
@@ -185,5 +191,8 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 20,
     fontWeight: "bold"
+  },
+  paws: {
+    fontSize: 20,
   }
 });
