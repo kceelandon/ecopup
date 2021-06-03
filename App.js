@@ -223,3 +223,18 @@ const styles = StyleSheet.create({
     fontSize: 20,
   }
 });
+
+/*
+Our sustainability ratings for stores on the ave are based on these main factors: waste management, sourcing, packaging, money spent on sustainability efforts, and community engagement in terms of sustainability. To quantify these, we reached out to several stores and asked those willing to participate ~15 questions about their sustainability practices. These are the specific factors we considered for each of our 3 score categories.
+
+Waste: composting, recycling, offering/usage of reusable dishes, choice of plastics, internal waste practices
+
+Product: organic materials usage, vegan options, local options, disposing of local products
+
+Community: sustainability efforts and general engagement in the community
+
+For more general information on sustainability, visit UW Sustainability!
+
+https://green.uw.edu/dashboard/waste
+https://green.uw.edu/dashboard/food
+*/
