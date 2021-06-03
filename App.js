@@ -7,51 +7,6 @@ import Marker from 'react-native-maps';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import Accord from "./Accord";
 
-// Different sustainability tabs
-const FirstRoute = () => (
-  <View style={styles.scene} >
-    <View style={{flexDirection:"row",marginTop: 20, marginLeft: 20, }}>
-    <Text style={styles.titleText}> Sustianability score</Text>
-    <TouchableOpacity
-        style={styles.circle}>
-          <Text>50</Text>
-      </TouchableOpacity>
-      </View>
-    <Accord/>
-
-  </View>
-);
-
-const SecondRoute = () => (
-  <View style={styles.scene} />
-);
-
-const ThirdRoute = () => (
-  <View style={styles.scene} />
-);
-
-const FourthRoute = () => (
-  <View style={styles.scene} />
-  // put score explaination here info here 
-);
-
-const renderTabBar = props => (
-  <TabBar
-    {...props}
-    indicatorStyle={{ backgroundColor: 'white' }}
-    style={{ backgroundColor: 'green' }}
-
-  />
-);
-const initialLayout = { width: Dimensions.get('window').width };
-
-const renderScene = SceneMap({
-  first: FirstRoute,
-  second: SecondRoute,
-  third: ThirdRoute,
-  fourth: FourthRoute,
-});
-
 export default function App() {
   const [index, setIndex] = useState(0);
   const [visible, setVisible]= useState(false);
@@ -64,7 +19,68 @@ export default function App() {
     { key: 'fourth', title:'Explain' },
   ]);
   const [locationData, setLocationData] = useState([]);
+  const [currWaste, setCurrWaste] = useState(0);
+  const [currProduct, setCurrProduct] = useState(0);
+  const [currCommunity, setCurrCommunity] = useState(0);
+  const [currWDesc, setCurrWDesc] = useState('');
+  const [currPDesc, setCurrPDesc] = useState('');
+  const [currCDesc, setCurrCDesc] = useState('');
   const ref = firebase.database().ref('locations');
+
+
+
+  // Different sustainability tabs
+  const FirstRoute = (props) => (
+    <View style={styles.scene} >
+      {console.log(props)}
+      <View style={{flexDirection:"row",marginTop: 20, marginLeft: 20, }}>
+      <Text style={styles.titleText}> Sustianability score</Text>
+      <TouchableOpacity
+          style={styles.circle}>
+            <Text>{props.wasteScore + props.productScore + props.commScore}</Text>
+        </TouchableOpacity>
+        </View>
+      <Accord wScore={props.wasteScore} pScore={props.productScore} cScore={props.commScore} wDesc={props.wasteDesc} pDesc={props.productDesc} cDesc={props.commDesc}/>
+
+    </View>
+  );
+
+  const SecondRoute = () => (
+    <View style={styles.scene} />
+  );
+
+  const ThirdRoute = () => (
+    <View style={styles.scene} />
+  );
+
+  const FourthRoute = () => (
+    <View style={styles.scene} />
+    // put score explaination here info here 
+  );
+
+  const renderTabBar = props => (
+    <TabBar
+      {...props}
+      indicatorStyle={{ backgroundColor: 'white' }}
+      style={{ backgroundColor: 'green' }}
+
+    />
+  );
+
+  const renderScene = ({ route }) => {
+    switch (route.key) {
+      case 'first':
+          return <FirstRoute wasteScore={currWaste} productScore={currProduct} commScore={currCommunity} wasteDesc={currWDesc} productDesc={currPDesc} commDesc={currCDesc}/>;
+      case 'second':
+          return <SecondRoute/>;
+      case 'third':
+          return <ThirdRoute/>;
+      case 'fourth':
+          return <FourthRoute/>;
+      default:
+          return null;
+    }
+  };
 
   useEffect(() => {
     ref.once('value').then((snapshot) => {
@@ -100,6 +116,17 @@ export default function App() {
 
   const initialLayout = { width: Dimensions.get('window').width };
 
+  const setScores = (waste, wasteDesc, product, productDesc, community, communityDesc, name) => {
+    // name is for logging purposes only
+    setCurrWaste(waste);
+    setCurrWDesc(wasteDesc);
+    setCurrProduct(product);
+    setCurrPDesc(productDesc);
+    setCurrCommunity(community);
+    setCurrCDesc(communityDesc);
+
+  }
+
   return (
     <View style={{flex: 1}}> 
       <MapView style={styles.map} 
@@ -114,11 +141,11 @@ export default function App() {
           <MapView.Marker
             key={index+10}
             coordinate={{latitude: marker.latitude, longitude: marker.longitude}}
+            onPress={() => setScores(marker.waste, marker['waste-desc'], marker.product, marker['product-desc'], marker.community, marker['community-desc'], marker.name)}
           >
-          {console.log(marker)}
           <MapView.Callout onPress={() =>setVisible(!visible) }>
                <Text style={styles.titleText}>{marker.name} &#x1F43E;</Text>
-               <Text> {"Remember! "+marker.description}</Text>
+               <Text> {"Remember! "}</Text>
 
                
           </MapView.Callout>
