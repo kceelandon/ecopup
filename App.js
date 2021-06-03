@@ -1,6 +1,6 @@
 import { StatusBar, setStatusBarNetworkActivityIndicatorVisible } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { Dimensions, StyleSheet, Text, View, useWindowDimensions,TouchableOpacity } from 'react-native';
+import { Dimensions, StyleSheet, Text, View, useWindowDimensions,TouchableOpacity, ScrollView } from 'react-native';
 import MapView from 'react-native-maps';
 import { firebase } from './src/firebase/config'
 import Marker from 'react-native-maps';
