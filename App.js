@@ -28,9 +28,10 @@ export default function App() {
   const [currWDesc, setCurrWDesc] = useState('');
   const [currPDesc, setCurrPDesc] = useState('');
   const [currCDesc, setCurrCDesc] = useState('');
-  const [currCompare, setCurrCompare] = useState(new Set());
+  const [currCompare, setCurrCompare] = useState([]);
   const blurb = "Our sustainability ratings for stores on the ave are based on these main factors: waste management, sourcing, packaging, money spent on sustainability efforts, and community engagement in terms of sustainability. To quantify these, we reached out to several stores and asked those willing to participate ~15 questions about their sustainability practices. These are the specific factors we considered for each of our 3 score categories.";
   const ref = firebase.database().ref('locations');
+  const [currCompareData, setCompareData] = useState(null);
 
 
 
@@ -61,20 +62,20 @@ export default function App() {
         </View> 
         <Text style={styles.subtitleText}>  Other similar shops near by:</Text>
         <View style={{flexDirection:"row", marginTop: 10}}> 
-          <Text>     title one  </Text>  
+          <Text>{props.compareStoreData[0].name}</Text>  
           <Button title="Compare"
             color='#76A173'
-            onPress={() => console.log("shop 1 click change this to repopulate table")} > 
+            onPress={() => setCompareData(props.compareStoreData[0])} > 
           </Button>
         </View> 
         <View style={{flexDirection:"row", marginTop: 10}}> 
-          <Text>     title two  </Text>  
+          <Text>{props.compareStoreData[1].name}</Text>  
           <Button title="Compare"
             color='#76A173'
-            onPress={() => console.log("shop 2 click change this to repopulate table")} >
+            onPress={() => setCompareData(props.compareStoreData[1])} >
           </Button>
         </View>
-        <Comparison title1={props.storeName} wScore={props.wasteScore} pScore={props.productScore} cScore={props.commScore}></Comparison>
+        <Comparison title1={props.storeName} wScore={props.wasteScore} pScore={props.productScore} cScore={props.commScore} compareData={currCompareData}></Comparison>
     </View>
   );
 
@@ -167,13 +168,13 @@ export default function App() {
     setCurrPDesc(productDesc);
     setCurrCommunity(community);
     setCurrCDesc(communityDesc);
-    let compareObject = new Set();
+    let compareObject = [];
     locationData.forEach((e) => {
       if (e.name === compareOne) {
-        compareObject.add(e);
+        compareObject.append(e);
       }
       if (e.name === compareTwo) {
-        compareObject.add(e);
+        compareObject.append(e);
       }
     });
     setCurrCompare(compareObject);

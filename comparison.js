@@ -5,12 +5,13 @@ import { Table, Row, Rows } from 'react-native-table-component';
 export default class Comparison extends Component {
   constructor(props) {
     super(props);
+    const comparisonData = props.compareData;
     this.state = {
-      tableHead: [ '', props.title1, 'title 2', 'Explanation'],
+      tableHead: [ '', props.title1, comparisonData.name, 'Explanation'],
       tableData: [
-        ['Waste', props.wScore, 'waste 2', 'text'],
-        ['Product', props.pScore, 'product 2', 'text'],
-        ['Community', props.cScore, 'community 2', 'text'],
+        ['Waste', props.wScore, comparisonData.waste, comparisonData['waste-desc']],
+        ['Product', props.pScore, comparisonData.product, comparisonData['product-desc']],
+        ['Community', props.cScore, comparisonData.community, comparisonData['community-desc']],
       ]
     }
   }
