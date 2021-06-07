@@ -25,6 +25,8 @@ export default function App() {
   const [currWDesc, setCurrWDesc] = useState('');
   const [currPDesc, setCurrPDesc] = useState('');
   const [currCDesc, setCurrCDesc] = useState('');
+  const [currCompare, setCurrCompare] = useState({});
+  const blurb = "Our sustainability ratings for stores on the ave are based on these main factors: waste management, sourcing, packaging, money spent on sustainability efforts, and community engagement in terms of sustainability. To quantify these, we reached out to several stores and asked those willing to participate ~15 questions about their sustainability practices. These are the specific factors we considered for each of our 3 score categories.";
   const ref = firebase.database().ref('locations');
 
 
@@ -53,8 +55,10 @@ export default function App() {
     <View style={styles.scene} />
   );
 
-  const FourthRoute = () => (
-    <View style={styles.scene} />
+  const FourthRoute = (props) => (
+    <View style={styles.scene}>
+      <Text>{props.blurb}</Text>
+    </View>
     // put score explaination here info here 
   );
 
@@ -76,7 +80,7 @@ export default function App() {
       case 'third':
           return <ThirdRoute/>;
       case 'fourth':
-          return <FourthRoute/>;
+          return <FourthRoute blurb={blurb}/>;
       default:
           return null;
     }
@@ -116,7 +120,7 @@ export default function App() {
 
   const initialLayout = { width: Dimensions.get('window').width };
 
-  const setScores = (waste, wasteDesc, product, productDesc, community, communityDesc, name) => {
+  const setScores = (waste, wasteDesc, product, productDesc, community, communityDesc, name, compareOne, compareTwo) => {
     // name is for logging purposes only
     setCurrWaste(waste);
     setCurrWDesc(wasteDesc);
@@ -124,7 +128,16 @@ export default function App() {
     setCurrPDesc(productDesc);
     setCurrCommunity(community);
     setCurrCDesc(communityDesc);
-
+    let compareObject = new Set();
+    locationData.forEach((e) => {
+      if (e.name === compareOne) {
+        compareObject.add(e);
+      }
+      if (e.name === compareTwo) {
+        compareObject.add(e);
+      }
+    });
+    setCurrCompare(compareObject);
   }
 
   return (
@@ -141,7 +154,7 @@ export default function App() {
           <MapView.Marker
             key={index+10}
             coordinate={{latitude: marker.latitude, longitude: marker.longitude}}
-            onPress={() => setScores(marker.waste, marker['waste-desc'], marker.product, marker['product-desc'], marker.community, marker['community-desc'], marker.name)}
+            onPress={() => setScores(marker.waste, marker['waste-desc'], marker.product, marker['product-desc'], marker.community, marker['community-desc'], marker.name, marker['related-store-one'], marker['related-store-two'])}
           >
           <MapView.Callout onPress={() =>setVisible(!visible) }>
                <Text style={styles.titleText}>{marker.name} &#x1F43E;</Text>
