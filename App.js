@@ -53,6 +53,7 @@ export default function App() {
 
   const SecondRoute = (props) => (
     <View style={styles.scene}>
+    <ScrollView> 
     <View style={{flexDirection:"row", marginTop: 10}}> 
       <Text style={styles.titleText}>  {props.storeName}</Text> 
         <TouchableOpacity
@@ -62,20 +63,21 @@ export default function App() {
         </View> 
         <Text style={styles.subtitleText}>  Other similar shops near by:</Text>
         <View style={{flexDirection:"row", marginTop: 10}}> 
-          <Text>{props.compareStoreData[0].name}</Text>  
+          <Text>   {props.compareStoreData[0].name}    </Text>  
           <Button title="Compare"
             color='#76A173'
             onPress={() => setCompareData(props.compareStoreData[0])} > 
           </Button>
         </View> 
         <View style={{flexDirection:"row", marginTop: 10}}> 
-          <Text>{props.compareStoreData[1].name}</Text>  
+          <Text>   {props.compareStoreData[1].name}          </Text>  
           <Button title="Compare"
             color='#76A173'
             onPress={() => setCompareData(props.compareStoreData[1])} >
           </Button>
         </View>
         <Comparison title1={props.storeName} wScore={props.wasteScore} pScore={props.productScore} cScore={props.commScore} compareData={currCompareData}></Comparison>
+        </ScrollView>
     </View>
   );
 
@@ -171,10 +173,10 @@ export default function App() {
     let compareObject = [];
     locationData.forEach((e) => {
       if (e.name === compareOne) {
-        compareObject.append(e);
+        compareObject.push(e);
       }
       if (e.name === compareTwo) {
-        compareObject.append(e);
+        compareObject.push(e);
       }
     });
     setCurrCompare(compareObject);

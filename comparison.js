@@ -5,7 +5,10 @@ import { Table, Row, Rows } from 'react-native-table-component';
 export default class Comparison extends Component {
   constructor(props) {
     super(props);
-    const comparisonData = props.compareData;
+    let comparisonData = props.compareData;
+    if(comparisonData == null){
+        comparisonData = {name : ''};
+    }
     this.state = {
       tableHead: [ '', props.title1, comparisonData.name, 'Explanation'],
       tableData: [
